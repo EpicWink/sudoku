@@ -28,7 +28,6 @@ class Puzzle:
         assert data.shape == (9, 9)
         assert data.dtype == np.uint8
         assert np.all(data < 10), list(zip(np.argwhere(data < 10), data[data < 10]))
-        self.initial = data.copy()
 
     @classmethod
     def from_str(cls, data_str):
@@ -95,7 +94,7 @@ class Puzzle:
     def _solve(self):
         for j in range(9):
             for k in range(9):
-                if self.initial[j, k] != 0:
+                if self.data[j, k] != 0:
                     continue
                 for l in range(1, 10):
                     if l in self.data[j] or l in self.data[:, k] or l in self.get_box_for(j, k):
@@ -122,8 +121,8 @@ def run_app(puzzle_path):
     _logger.info("Initial puzzle:\n%s", puzzle.format_puzzle().replace(".", " ").replace("", " "))
     _logger.info("Initial puzzle is valid: %s", puzzle.is_valid())
     puzzle.solve()
-    _logger.info("Final puzzle:\n%s", puzzle.format_puzzle().replace(".", " ").replace("", " "))
-    _logger.debug("Final puzzle is valid: %s", puzzle.is_valid())
+    _logger.info("Solved puzzle:\n%s", puzzle.format_puzzle().replace(".", " ").replace("", " "))
+    _logger.debug("Solved puzzle is valid: %s", puzzle.is_valid())
 
 
 def main():
