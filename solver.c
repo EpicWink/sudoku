@@ -3,8 +3,8 @@ Created by: Laurie 2019/03/19
 
 Sudoku puzzle solver.
 
-Compile: gcc solver.c -o solver -lm -m64 -O3
-Usage: ./solver
+Compile: gcc solver.c -o bin/solver -lm -m64 -O3
+Usage: bin/solver
 */
 
 #include <stdbool.h>
@@ -83,7 +83,7 @@ void print_data(unsigned char data[81]) {
         }
         data_str_j += sprintf(data_str + data_str_j, "\n");
         if ((j == 2) || (j == 5)) {
-            data_str_j += sprintf(data_str + data_str_j, "-----------\n");
+            data_str_j += sprintf(data_str + data_str_j, "---+---+---\n");
         }
     }
     puts(data_str);
@@ -101,8 +101,6 @@ bool solve(unsigned char data[81]) {
             if (data[j * 9 + k] != 0) {
                 continue;
             }
-            // fprintf(stderr, "Processing cell: %d, %d\n", j, k);
-            // print_data(data);
             get_row(j, data, row);
             get_column(k, data, column);
             get_box_for(j, k, data, box);
@@ -114,12 +112,10 @@ bool solve(unsigned char data[81]) {
                 new_data[j * 9 + k] = l;
                 if (solve(new_data)) {
                     copy_data(new_data, data);
-                    // print_data(data);
                     fflush(stdout);
                     return true;
                 }
             }
-            // fprintf(stderr, "No available values for cell: %d, %d\n", j, k);
             return false;
         }
     }
@@ -150,6 +146,14 @@ bool parse_puzzle_str(char* puzzle_str, unsigned char res[81]) {
         if (val_char == '-') {
             // fprintf(stderr, "Encountered '-'\n");
             if (!(((k > 35) && (k < 48)) || ((k > 83) && (k < 96)))) {
+                fprintf(stderr, "Found unexpected '-' at characher %d in puzzle file\n", k);
+                return false;
+            }
+            continue;
+        }
+        if (val_char == '+') {
+            // fprintf(stderr, "Encountered '+'\n");
+            if ((k != 39) && (k != 43) && (k != 87) && (k != 91)) {
                 fprintf(stderr, "Found unexpected '-' at characher %d in puzzle file\n", k);
                 return false;
             }
@@ -196,24 +200,12 @@ bool load_puzzle_file(char* puzzle_fname, unsigned char res[81]) {
         return false;
     }
 
-    // puts(puzzle_str);
     return parse_puzzle_str(puzzle_str, res);
 }
 
 
 int main(int argc, char** argv) {
     unsigned char data[81];
-    // unsigned char data[81] = {
-    //     5, 0, 8, 0, 6, 0, 0, 7, 1,
-    //     2, 0, 0, 0, 0, 0, 6, 9, 0,
-    //     0, 0, 0, 2, 7, 4, 0, 0, 0,
-    //     6, 1, 3, 0, 0, 5, 8, 0, 0,
-    //     0, 2, 0, 7, 0, 1, 0, 6, 0,
-    //     0, 0, 5, 6, 0, 0, 1, 4, 9,
-    //     0, 0, 0, 1, 3, 7, 0, 8, 0,
-    //     0, 6, 9, 0, 0, 2, 0, 0, 5,
-    //     8, 7, 0, 0, 5, 0, 4, 0, 2,
-    // };
 
     if (argc != 2) {
         fprintf(stderr, "Usage: %s puzzle\n", argv[0]);

@@ -20,7 +20,7 @@ sys.setrecursionlimit(10000)
 
 
 class Puzzle:
-    _horz_sep = "-----------"
+    _horz_sep = "---+---+---"
     _vert_sep = "|"
 
     def __init__(self, data):
