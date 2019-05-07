@@ -33,16 +33,14 @@ class Puzzle:
     def from_str(cls, data_str):
         data = []
         for j, line in enumerate(data_str.strip().splitlines()):
-            if j in (3, 7):
-                assert line == cls._horz_sep, (j, line)
+            if not line:
                 continue
             row = []
             for k, char in enumerate(line):
-                if k in (3, 7):
-                    assert char == cls._vert_sep, ((j, k), char)
+                if char == " ":
                     continue
                 val = 0 if char == "." else int(char)
-                assert val in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9), ((j, k), val)
+                assert 0 <= val < 10, ((j, k), val)
                 row.append(val)
             assert len(row) == 9, (j, len(row))
             data.append(row)
@@ -121,8 +119,9 @@ def run_app(puzzle_path):
     _logger.info("Initial puzzle:\n%s", puzzle.format_puzzle().replace(".", " ").replace("", " "))
     _logger.info("Initial puzzle is valid: %s", puzzle.is_valid())
     puzzle.solve()
-    _logger.info("Solved puzzle:\n%s", puzzle.format_puzzle().replace(".", " ").replace("", " "))
+    _logger.debug("Solved puzzle:\n%s", puzzle.format_puzzle().replace(".", " ").replace("", " "))
     _logger.debug("Solved puzzle is valid: %s", puzzle.is_valid())
+    print(puzzle.format_puzzle())
 
 
 def main():

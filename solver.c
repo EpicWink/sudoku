@@ -131,30 +131,14 @@ bool parse_puzzle_str(char* puzzle_str, unsigned char res[81]) {
 
     for (unsigned char k = 0; k < 132; k += 1) {
         val_char = puzzle_str[k];
-        if (val_char == '|') {
-            // fprintf(stderr, "Encountered '|'\n");
+        if (val_char == ' ') {
+            // fprintf(stderr, "Encountered ' '\n");
             continue;
         }
         if (val_char == '\n') {
             // fprintf(stderr, "Encountered newline\n");
-            if (k % 12 != 11) {
+            if (j % 9 != 0) {
                 fprintf(stderr, "Found unexpected newline at characher %d in puzzle file\n", k);
-                return false;
-            }
-            continue;
-        }
-        if (val_char == '-') {
-            // fprintf(stderr, "Encountered '-'\n");
-            if (!(((k > 35) && (k < 48)) || ((k > 83) && (k < 96)))) {
-                fprintf(stderr, "Found unexpected '-' at characher %d in puzzle file\n", k);
-                return false;
-            }
-            continue;
-        }
-        if (val_char == '+') {
-            // fprintf(stderr, "Encountered '+'\n");
-            if ((k != 39) && (k != 43) && (k != 87) && (k != 91)) {
-                fprintf(stderr, "Found unexpected '-' at characher %d in puzzle file\n", k);
                 return false;
             }
             continue;
